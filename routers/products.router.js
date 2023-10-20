@@ -28,7 +28,9 @@ const router = express.Router();
       }
 
       // If no products then throw an error
-      if (!result) throw createError(404, "No products found!");
+      if (!result.length) {
+        throw createError(404, "No products found!");
+      }
 
       const replaceID = result.map(pro => replace_idToid(pro));
       res.json({ data: replaceID });
