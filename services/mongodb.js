@@ -7,13 +7,23 @@ if (!MONGODB_URL) {
 }
 
 const client = new MongoClient(MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
   serverApi: {
     version: ServerApiVersion.v1,
     deprecationErrors: true,
   },
 });
 
-export const clientPromise = client.connect().then(client => {
-  console.log("Successfully connected to MongoDB");
-  return client;
-});
+client
+  .connect()
+  .then(client => {
+    console.log("Successfully connected to MongoDB");
+    return client;
+  })
+  .catch(err => {
+    console.error(err);
+    return client;
+  });
+
+export { client as mongodbClient };
