@@ -7,8 +7,7 @@ if (!MONGODB_URL) {
 }
 
 const client = new MongoClient(MONGODB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  connectTimeoutMS: 30000,
   serverApi: {
     version: ServerApiVersion.v1,
     deprecationErrors: true,
