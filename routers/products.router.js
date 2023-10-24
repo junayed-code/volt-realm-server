@@ -31,8 +31,8 @@ router.get("/", async (req, res, next) => {
       throw createError(404, "No products found!");
     }
 
-    const replaceID = result.map(pro => replace_idToid(pro));
-    res.json({ data: replaceID });
+    const data = result.map(pro => replace_idToid(pro));
+    res.json({ data });
   } catch (err) {
     next(err);
   }
@@ -51,6 +51,24 @@ router.get("/:nameSlug", async (req, res, next) => {
     if (!result) throw createError(404, "No product found!");
 
     res.json({ data: replace_idToid(result) });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Get products by brand name
+router.get("/brand/:name", async (req, res, next) => {
+  try {
+    const { name } = req.params;
+    const query = { brand: { $regex: name, $options: "i" } };
+
+    const result = await products.find(query, options).toArray();
+
+    // If no products then throw an error
+    if (!result.length) throw createError(404, "No products found!");
+
+    const data = result.map(item => replace_idToid(item));
+    res.json({ data });
   } catch (err) {
     next(err);
   }
